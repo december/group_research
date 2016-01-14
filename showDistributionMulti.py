@@ -9,12 +9,12 @@ import csv
 import numpy
 import pylab
 
-csvfile = file('SIRdecayImpulse/multi_res/simpleParams.csv', 'rb')
+csvfile = file('/Users/luyunfei/Desktop/laboratory/graduation project/SIRdecayImpulse/multi_res/simpleParams.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
 	data.append(line)
-prefix = 'SIRdecayImpulse/params_distribution_multi/'
+prefix = '/Users/luyunfei/Desktop/laboratory/graduation project/SIRdecayImpulse/params_distribution_multi/'
 suffix = '.png'
 name = ['alpha', 'beta', 'gamma', 'G', 'n', 'n:G']
 basic = list()
@@ -50,51 +50,39 @@ for line in data:
 		peak[0][0][0].append(float(line[j]))
 		peak[0][0][1].append(float(line[j+1]))
 		j += 2
+
+basicbin = list()
+basicbin.append([0.0, 50, 4.0])
+basicbin.append([0.0, 50, 2.0])
+basicbin.append([0.0, 50, 1.0])
+basicbin.append([20.0, 50, 2500.0])
+basicbin.append([0.0, 50, 500.0])
+basicbin.append([0.0, 50, 1.0])
+ 
 for i in range(6):
-	print name[i] + ': ' + str(min(basic[i])) + ' ' + str(max(basic[i])) 
-
-
-
-'''
-bins = list()
-bins.append([0.0, 20, 4])
-bins.append([0.0, 10, 1.0])
-bins.append([0.0, 10, 1.0])
-bins.append([20.0, 20, 3500.0])
-bins.append([0.0, 20, 200.0])
-bins.append([0.0, 20, 150.0])
-bins.append([0.0, 10, 42.0])
-distribution = list()
-for i in range(7):
-	temp = list()
-	distribution.append(temp)
-for line in data:
-	for i in range(7):
-		distribution[i].append(float(line[i]))
-for 
-for i in range(7):
 	x = list()
 	y = list()
-	number = bins[i][1]
-	d = (bins[i][2] - bins[i][0]) * 1.0 / bins[i][1]
-	begin = bins[i][0] + d / 2
+	number = basicbin[i][1]
+	d = (basicbin[i][2] - basicbin[i][0]) * 1.0 / basicbin[i][1]
+	begin = basicbin[i][0] + d / 2
 	for j in range(number):
 		x.append(begin + j * d)
 		y.append(0)
-	for k in distribution[i]:
-		index = int((k - bins[i][0]) / d)
-		if i == 5 and k == 0:
-			continue
-		if index == bins[i][1]:
+	for k in basic[i]:
+		index = int((k - basicbin[i][0]) / d)
+		#if i == 5 and k == 0:
+		#	continue
+		if index == basicbin[i][1]:
 			index -= 1
-		if index > bins[i][1] or index < 0:
-			print index
-			print k
-			print bins[i][0]
-			print bins[i][2]
+		if index > basicbin[i][1] or index < 0:
+			#print index
+			#print k
+			#print basicbin[i][0]
+			#print basicbin[i][2]
+			continue
 		else:
 			y[index] += 1
-	print x
+	#print x
 	print y
 	pylab.plot(x, y)
 	pylab.xlabel(name[i])
@@ -106,29 +94,92 @@ for i in range(7):
 	pylab.savefig(prefix+name[i]+'_log'+suffix)
 	pylab.clf()
 	pylab.cla()
-ng = list()
-for i in range(2022):
-	ng.append(distribution[4][i] * 1.0 / distribution[3][i])
-bins.append([0.0, 10, 1.0])
-d = 0.1
+
+twopeak = [0.0, 50, 90.0]
+threepeak = [0.0, 50, 95.0]
 x = list()
 y = list()
-begin = 0.05
-for j in range(10):
-	x.append(begin + j * d)
-	y.append(0)
-for k in ng:
-	index = int((k - bins[7][0]) / d)
-	y[index] += 1
-pylab.plot(x, y)
-pylab.xlabel(name[7])
-pylab.savefig(prefix+name[7]+suffix)
+d = twopeak[2] / twopeak[1]
+begin = twopeak[0] + d / 2
+for i in range(3):
+	y.append(list())
+for i in range(twopeak[1]):
+	x.append(begin + i * d)
+	y[0].append(0)
+	y[1].append(0)
+	y[2].append(0)
+for i in range(2):
+	for k in peak[2][i][0]:
+		index = int((k - twopeak[0]) / d)
+		if index == twopeak[1]:
+			index -= 1
+		if index < 0 or index > twopeak[1]:
+			continue
+		y[i][index] += 1
+for i in range(twopeak[1]):
+	if i == 0:
+		y[0][i] = (y[0][0] + y[0][1]) * 1.0 / 2
+		y[1][i] = (y[1][0] + y[1][1]) * 1.0 / 2
+		continue
+	if i == twopeak[1] - 1:
+		y[0][i] = (y[0][i] + y[0][i-1]) * 1.0 / 2
+		y[1][i] = (y[1][i] + y[1][i-1]) * 1.0 / 2
+		continue
+	y[0][i] = (y[0][i] + y[0][i-1] + y[0][i+1]) * 1.0 / 3
+	y[1][i] = (y[1][i] + y[1][i-1] + y[1][i+1]) * 1.0 / 3
+pylab.plot(x, y[0], 'r')
+pylab.plot(x, y[1], 'g')
+pylab.xlabel('2 Peaks')
+pylab.savefig(prefix+'Twopeak_smooth'+suffix)
 pylab.clf()
 pylab.cla()
-pylab.semilogx(x, y)
-pylab.xlabel('log('+name[7]+')')
-pylab.savefig(prefix+name[7]+'_log'+suffix)
+pylab.semilogx(x, y[0], 'r')
+pylab.semilogx(x, y[1], 'g')
+pylab.xlabel('log(2 Peaks)')
+pylab.savefig(prefix+'Twopeak_log_smooth'+suffix)
 pylab.clf()
 pylab.cla()
-'''
+d = threepeak[2] / threepeak[1]
+begin = threepeak[0] + d / 2
+for i in range(threepeak[1]):
+	x[i] = begin + i * d
+	y[0][i] = 0
+	y[1][i] = 0
+	y[2][i] = 0
+for i in range(3):
+	for k in peak[3][i][0]:
+		index = int((k - threepeak[0]) / d)
+		if index == threepeak[1]:
+			index -= 1
+		if index < 0 or index > threepeak[1]:
+			continue
+		y[i][index] += 1
+for i in range(threepeak[1]):
+	if i == 0:
+		y[0][i] = (y[0][0] + y[0][1]) * 1.0 / 2
+		y[1][i] = (y[1][0] + y[1][1]) * 1.0 / 2
+		y[2][i] = (y[2][0] + y[2][1]) * 1.0 / 2
+		continue
+	if i == twopeak[1] - 1:
+		y[0][i] = (y[0][i] + y[0][i-1]) * 1.0 / 2
+		y[1][i] = (y[1][i] + y[1][i-1]) * 1.0 / 2
+		y[2][i] = (y[2][i] + y[2][i-1]) * 1.0 / 2
+		continue
+	y[0][i] = (y[0][i] + y[0][i-1] + y[0][i+1]) * 1.0 / 3
+	y[1][i] = (y[1][i] + y[1][i-1] + y[1][i+1]) * 1.0 / 3
+	y[2][i] = (y[2][i] + y[2][i-1] + y[2][i+1]) * 1.0 / 3
+pylab.plot(x, y[0], 'r')
+pylab.plot(x, y[1], 'g')
+pylab.plot(x, y[2], 'b')
+pylab.xlabel('3 Peaks')
+pylab.savefig(prefix+'Threepeak_smooth'+suffix)
+pylab.clf()
+pylab.cla()
+pylab.semilogx(x, y[0], 'r')
+pylab.semilogx(x, y[1], 'g')
+pylab.semilogx(x, y[2], 'b')
+pylab.xlabel('log(3 Peaks)')
+pylab.savefig(prefix+'Threepeak_log_smooth'+suffix)
+pylab.clf()
+pylab.cla()
 print 'Finished'
