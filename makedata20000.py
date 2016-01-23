@@ -13,8 +13,30 @@ def mycmp(x, y):
 			return 1
 	return 0
 
-sep = []
+def newcmp(x, y):
+	if x[0] < y[0]:
+		return -1
+	if x[0] > y[0]:
+		return 1
+	if x[0] == y[0]:
+		if x[1] < y[1]:
+			return -1
+		if x[1] > y[1]:
+			return 1
+		if x[1] == y[1]:
+			if x[3] < y[3]:
+				return -1;
+			if x[3] > y[3]:
+				return 1;
+	return 0
+
+def isEqual(x, y):
+	if x[0] == y[0] and x[1] == y[1] and abs(int(x[3]) - int(y[3])) < 5:
+		return True
+	return False
+
 public = [0, 0, 0]
+sep = []
 
 #get 20000 target group ids
 f = open('../data20000/20151020_gid_20151120_20000')
@@ -29,6 +51,7 @@ csvfile = file('../data20000/10299_20151120_20151122_20000_r.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
+	line[2] = 0
 	data.append(line)
 csvfile.close()
 come = data[1:]
@@ -36,6 +59,7 @@ csvfile = file('../data20000/10299_20151123_20151127.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
+	line[2] = 0
 	data.append(line)
 csvfile.close()
 for line in data:
@@ -47,6 +71,7 @@ for fn in filename:
 	reader = csv.reader(csvfile)
 	data = list()
 	for line in reader:
+		line[2] = 0
 		data.append(line)
 	csvfile.close()
 	come.extend(data[1:])
@@ -60,12 +85,13 @@ for fn in filename:
 	reader = csv.reader(csvfile)
 	data = list()
 	for line in reader:
+		line[2] = 1
 		data.append(line)
 	csvfile.close()
 	for line in data:
 		if line[0] in idlist and int(line[4]) == 1:
 			come.append(line)
-sep.append(len(come))
+sep.append(len(come) - sep[0])
 print 'Scan-part Finished.'
 
 #people invited to the group
@@ -75,13 +101,14 @@ for fn in filename:
 	reader = csv.reader(csvfile)
 	data = list()
 	for line in reader:
+		line[2] = 2
 		data.append(line)
 	csvfile.close()
 	for line in data:
 		if line[0] in idlist and int(line[4]) == 1:
 			come.append(line)
+sep.append(len(come) - sep[0] - sep[1])
 print 'Invited-part Finished.'
-sep.append(len(come))
 
 #examine 10061
 csvfile = file('../data20000/10061_20151120_40.csv', 'rb')
@@ -90,7 +117,6 @@ data = list()
 for line in reader:
 	data.append(line)
 csvfile.close()
-print 'Begin examining...'
 count = 0
 newitem = 0
 for line in data:
@@ -99,31 +125,48 @@ for line in data:
 		print count
 	if line[0] not in idlist or int(line[4]) == 2:
 		continue
-	flag = True
-	for i in range(len(come)):
-		if line[0] == come[i][0] and line[1] == come[i][1] and abs(int(line[2]) - int(come[i][3])) < 5:
+	tplist = line[:2]
+	tplist.append(3)
+	tplist.append(line[2])
+	come.append(tplist)
+	newitem += 1
+print 'Examinine data ready.'
+come.sort(lambda x,y:newcmp(x, y))
+mycome = list()
+error = 0
+for i in range(len(come)-1):
+	if come[i][2] != 3:
+		mycome.append(come[i])
+	else:
+		flag = True
+		if i > 0 and isEqual(come[i], come[i-1]):
 			flag = False
-			for j in range(3):
-				if i < sep[j]:
-					public[j] += 1
-			break
-	if flag:
-		tplist = line[:2]
-		tplist.append(0)
-		tplist.append(line[2])
-		come.append(tplist)
-		newitem += 1
+			newitem -= 1
+			if come[i-1][2] == 3:
+				error += 1
+			else:
+				public[come[i-1][2]] += 1
+		if flag and i < len(come) and isEqual(come[i], come[i+1]):
+			if come[i+1][2] != 3:
+				public[come[i+1][2]] += 1
+				newitem -= 1
+				flag = False
+		if flag:
+			mycome.append(come[i])
+print 'Examining Finished.'
+print error
 print newitem
 print public
 print sep
-print 'Examining Finished.'
+
 '''
 #exit and order
 csvfile = file('../data20000/12078_20151120_20160117.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
-	data.append(line)
+	if line[0] in idlist:
+		data.append(line)
 csvfile.close()
 splist = list()
 for line in data:
@@ -132,7 +175,7 @@ for line in data:
 	tplist.append(int(line[2]))
 	tplist.append(1)
 	splist.append(tplist)
-for line in come:
+for line in mycome:
 	tplist = list()
 	tplist.append(line[0])
 	tplist.append(int(line[3]))
