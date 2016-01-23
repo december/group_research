@@ -100,7 +100,7 @@ for line in data:
 	if line[0] not in idlist or int(line[4]) == 2:
 		continue
 	flag = True
-	for i in len(come):
+	for i in range(len(come)):
 		if line[0] == come[i][0] and line[1] == come[i][1] and abs(int(line[2]) - int(come[i][3])) < 5:
 			flag = False
 			for j in range(3):
