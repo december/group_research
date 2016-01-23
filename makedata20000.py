@@ -159,7 +159,6 @@ print newitem
 print public
 print sep
 
-'''
 #exit and order
 csvfile = file('../data20000/12078_20151120_20160117.csv', 'rb')
 reader = csv.reader(csvfile)
@@ -234,6 +233,6 @@ csvwrite = file('../groupdata_20000/idset.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(idset)
 csvwrite.close()
-'''
+
 print 'Finished'
 
