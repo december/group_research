@@ -86,6 +86,7 @@ for fn in filename:
 		line[2] = 1
 		data.append(line)
 	csvfile.close()
+	data = data[1:]
 	for line in data:
 		if int(line[4]) == 1:
 			come.append(line)
@@ -102,6 +103,7 @@ for fn in filename:
 		line[2] = 2
 		data.append(line)
 	csvfile.close()
+	data = data[1:]
 	for line in data:
 		if int(line[4]) == 1:
 			come.append(line)
@@ -115,6 +117,7 @@ data = list()
 for line in reader:
 	data.append(line)
 csvfile.close()
+data = data[1:]
 count = 0
 newitem = 0
 for line in data:
@@ -173,7 +176,7 @@ csvfile = file('../origindata/12078_20151120_20160117.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
-	if int(line[2]) >= 1451577600:
+	if line[2][0] != 't' and int(line[2]) >= 1451577600:
 		data.append(line)
 csvfile.close()
 splist = list()
