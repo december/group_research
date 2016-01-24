@@ -24,9 +24,9 @@ def newcmp(x, y):
 		if x[1] > y[1]:
 			return 1
 		if x[1] == y[1]:
-			if x[3] < y[3]:
+			if int(x[3]) < int(y[3]):
 				return -1;
-			if x[3] > y[3]:
+			if int(x[3]) > int(y[3]):
 				return 1;
 	return 0
 
@@ -135,7 +135,9 @@ come.sort(lambda x,y:newcmp(x, y))
 mycome = list()
 error = 0
 errorlist = list()
-for i in range(len(come)-1):
+for i in range(len(come)):
+	if int(come[i][3]) >= 1451577600:
+		continue
 	if come[i][2] != 3:
 		mycome.append(come[i])
 	else:
