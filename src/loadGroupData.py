@@ -1,6 +1,6 @@
 def load_data(n):
-    gid_list_path='../group_data_lyf/idset.csv'
-    dir_path='../group_data_lyf/'
+    gid_list_path='../../groupdata/idset.csv'
+    dir_path='../../groupdata/'
     f=open(gid_list_path,'r')
     lines=f.readlines()
     line=lines[n]
@@ -18,8 +18,8 @@ def load_data(n):
     return data
 
 def load_test_data(n):
-    gid_list_path='../group_data_lyf/idset.csv'
-    dir_path='../group_data_lyf/'
+    gid_list_path='../../groupdata/idset.csv'
+    dir_path='../../groupdata/'
     f=open(gid_list_path,'r')
     lines=f.readlines()
     line=lines[n]
