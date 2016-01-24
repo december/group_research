@@ -203,8 +203,8 @@ for line in splist:
 			daylist.append(d)
 			comelist.append(c)
 			golist.append(g)
-			while date < 30:
-				date += 1
+			while d < 30:
+				d += 1
 				daylist.append(d)
 				comelist.append(c)
 				golist.append(g)
