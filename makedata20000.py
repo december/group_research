@@ -134,6 +134,7 @@ print 'Examinine data ready.'
 come.sort(lambda x,y:newcmp(x, y))
 mycome = list()
 error = 0
+errorlist = list()
 for i in range(len(come)-1):
 	if come[i][2] != 3:
 		mycome.append(come[i])
@@ -143,6 +144,9 @@ for i in range(len(come)-1):
 			flag = False
 			newitem -= 1
 			if come[i-1][2] == 3:
+				tplist = list()
+				errorlist.append(come[i-1])
+				errorlist.append(come[i])
 				error += 1
 			else:
 				public[come[i-1][2]] += 1
@@ -158,6 +162,10 @@ print error
 print newitem
 print public
 print sep
+csvwrite = file('../groupdata_20000/errorlist.csv', 'wb')
+writer = csv.writer(csvwrite)
+writer.writerows(errorlist)
+csvwrite.close()
 
 #exit and order
 csvfile = file('../data20000/12078_20151120_20160117.csv', 'rb')
@@ -226,9 +234,9 @@ for line in splist:
 		golist.append(g)
 		d += 1
 	if int(line[2]) == 1:
-		go += 1
+		g += 1
 	else:
-		come += 1
+		c += 1
 csvwrite = file('../groupdata_20000/idset.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(idset)
