@@ -38,24 +38,21 @@ def isEqual(x, y):
 public = [0, 0, 0]
 sep = []
 
-#get 20000 target group ids
-f = open('../data20000/20151020_gid_20151120_20000')
-line = f.readline()
-idlist = line.strip().split(',') 
+#get all target group ids
+idlist = list()
+filename = ['20151020_gid_20151120_20000', '20151020_gid_20151120_40000', '20151020_gid_20151120_60000', '20151020_gid_20151120_60000-100000', '20151020_gid_20151120_100000-135667']
+for fn in filename:
+	f = open('../origindata/' + fn)
+	line = f.readline()
+	tplist = line.strip().split(',') 
+	idlist.extend(tplist)
 f.close()
 print len(idlist)
 print 'Getting target group ID finished...'
 
 #people added into the group by others
-csvfile = file('../data20000/10299_20151120_20151122_20000_r.csv', 'rb')
-reader = csv.reader(csvfile)
-data = list()
-for line in reader:
-	line[2] = 0
-	data.append(line)
-csvfile.close()
-come = data[1:]
-csvfile = file('../data20000/10299_20151123_20151127.csv', 'rb')
+come = list()
+csvfile = file('../origindata/10299_20151125_20151202_20000.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
@@ -63,11 +60,11 @@ for line in reader:
 	data.append(line)
 csvfile.close()
 for line in data:
-	if line[0] in idlist and int(line[3]) < 1448380800:
+	if int(line[3]) >= 1448640000:
 		come.append(line)
-filename = ['10299_20151125_20151202_20000', '10299_20151203_20151212_20000', '10299_20151213_20151222_20000', '10299_20151223_20151231_20000']
+filename = ['10299_20151120_20151122', '10299_20151123_20151127', '10299_20151203_20151212_20000', '10299_20151213_20151222_20000', '10299_20151223_20151231_20000', '10299_20151128_20151231_40000', '10299_20151128_20151231_60000', '10299_20151128_20151231_60000-100000', '10299_20151128_20151231_100000-135667']
 for fn in filename:	
-	csvfile = file('../data20000/' + fn + '.csv', 'rb')
+	csvfile = file('../origindata/' + fn + '.csv', 'rb')
 	reader = csv.reader(csvfile)
 	data = list()
 	for line in reader:
@@ -79,9 +76,9 @@ sep.append(len(come))
 print 'Added-part Finished.'
 
 #people scan the 2D barcode
-filename = ['10312_20151120_20151122_r', '10312_20151123_20151127', '10312_20151128_20151213_20000', '10312_20151214_20151231_20000']
+filename = ['10312_20151120_20151122_r', '10312_20151123_20151127', '10312_20151128_20151213_20000', '10312_20151214_20151231_20000', '10312_20151128_20151231_40000', '10312_20151128_20151231_60000', '10312_20151128_20151231_60000-100000', '10312_20151128_20151231_100000-135667']
 for fn in filename:
-	csvfile = file('../data20000/' + fn + '.csv', 'rb')
+	csvfile = file('../origindata/' + fn + '.csv', 'rb')
 	reader = csv.reader(csvfile)
 	data = list()
 	for line in reader:
@@ -89,15 +86,15 @@ for fn in filename:
 		data.append(line)
 	csvfile.close()
 	for line in data:
-		if line[0] in idlist and int(line[4]) == 1:
+		if int(line[4]) == 1:
 			come.append(line)
 sep.append(len(come) - sep[0])
 print 'Scan-part Finished.'
 
 #people invited to the group
-filename = ['11088_20151120_20151122', '11088_20151123_20151127', '11088_20151128_20151231_20000']
+filename = ['11088_20151120_20151122', '11088_20151123_20151127', '11088_20151128_20151231_20000', '11088_20151128_20151231_40000', '11088_20151128_20151231_60000', '11088_20151128_20151231_60000-100000', '11088_20151128_20151231_100000-135667']
 for fn in filename:
-	csvfile = file('../data20000/' + fn + '.csv', 'rb')
+	csvfile = file('../origindata/' + fn + '.csv', 'rb')
 	reader = csv.reader(csvfile)
 	data = list()
 	for line in reader:
@@ -105,13 +102,13 @@ for fn in filename:
 		data.append(line)
 	csvfile.close()
 	for line in data:
-		if line[0] in idlist and int(line[4]) == 1:
+		if int(line[4]) == 1:
 			come.append(line)
 sep.append(len(come) - sep[0] - sep[1])
 print 'Invited-part Finished.'
 
 #examine 10061
-csvfile = file('../data20000/10061_20151120_40.csv', 'rb')
+csvfile = file('../origindata/10061_20151120_40.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
@@ -123,7 +120,7 @@ for line in data:
 	count += 1
 	if count % 10000 == 0:
 		print count
-	if line[0] not in idlist or int(line[4]) == 2:
+	if int(line[4]) == 2 or int(line[2]) >= 1451577600 or line[0] not in idlist:
 		continue
 	tplist = line[:2]
 	tplist.append(3)
@@ -146,10 +143,11 @@ for i in range(len(come)):
 			flag = False
 			newitem -= 1
 			if come[i-1][2] == 3:
-				tplist = list()
-				errorlist.append(come[i-1])
-				errorlist.append(come[i])
-				error += 1
+				if come[i-1][3] != come[i][3]:
+					tplist = list()
+					errorlist.append(come[i-1])
+					errorlist.append(come[i])
+					error += 1
 			else:
 				public[come[i-1][2]] += 1
 		if flag and i < len(come) and isEqual(come[i], come[i+1]):
@@ -164,17 +162,17 @@ print error
 print newitem
 print public
 print sep
-csvwrite = file('../groupdata_20000/errorlist.csv', 'wb')
+csvwrite = file('../groupdata/errorlist.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(errorlist)
 csvwrite.close()
 
 #exit and order
-csvfile = file('../data20000/12078_20151120_20160117.csv', 'rb')
+csvfile = file('../origindata/12078_20151120_20160117.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
-	if line[0] in idlist:
+	if int(line[2]) >= 1451577600:
 		data.append(line)
 csvfile.close()
 splist = list()
@@ -205,7 +203,7 @@ for line in splist:
 			daylist.append(d)
 			comelist.append(c)
 			golist.append(g)
-			while d < 30:
+			while d < 42:
 				d += 1
 				daylist.append(d)
 				comelist.append(c)
@@ -214,7 +212,7 @@ for line in splist:
 			unitdata.append(comelist)
 			unitdata.append(daylist)
 			unitdata.append(golist)
-			csvwrite = file('../groupdata_20000/' + lastid + '.csv', 'wb')
+			csvwrite = file('../groupdata/' + lastid + '.csv', 'wb')
 			writer = csv.writer(csvwrite)
 			writer.writerows(unitdata)
 			csvwrite.close()
@@ -239,7 +237,7 @@ for line in splist:
 		g += 1
 	else:
 		c += 1
-csvwrite = file('../groupdata_20000/idset.csv', 'wb')
+csvwrite = file('../groupdata/idset.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(idset)
 csvwrite.close()
