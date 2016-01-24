@@ -25,13 +25,13 @@ def multiImpulse(seq, threshold=10):
 
 def params2fcnval(params,nsteps):
     beta=params['beta'].value
-    #alpha=params['alpha'].value
-    #gamma=params['gamma'].value
+    alpha=params['alpha'].value
+    gamma=params['gamma'].value
     G=params['G'].value
     n=params['n'].value
-    #lambdaval=params['lambdaval'].value
-    #deltaval=params['delta'].value
-    #res=SIRd.SIRdecayImpulse(gamma,alpha,beta,G,n,nsteps,lambdaval,deltaval)
+    lambdaval=params['lambdaval'].value
+    deltaval=params['delta'].value
+    res=SIRd.SIRdecayImpulse(gamma,alpha,beta,G,n,nsteps,lambdaval,deltaval)
     res = SIRd.SI(beta, G, n, nsteps)
     return res
 
@@ -39,8 +39,8 @@ def fcn2minSingleImpulse(params,x,data):
     x1=x[0]
     x2=x[1]
     #Predict People
-    #nsteps=max(max(x1),max(x2))+1
-    nsteps=max(max(x1),max(x2))+11
+    nsteps=max(max(x1),max(x2))+1
+    #nsteps=max(max(x1),max(x2))+11
 
     res=params2fcnval(params,nsteps)
     plist=list()
@@ -82,8 +82,8 @@ def fcn2minMultiImpulse(params,x,data,peaks):
     x1=x[0]
     x2=x[1]
     #Predict People
-    #nsteps=max(max(x1),max(x2))+1
-    nsteps=max(max(x1),max(x2))+11
+    nsteps=max(max(x1),max(x2))+1
+    #nsteps=max(max(x1),max(x2))+11
     #print nsteps
 
     res=params2fcnvalMulti(params,nsteps,peaks)
@@ -112,9 +112,9 @@ def optimize(rawdata):
     seq=rawdata[1]
     
     #Single Impulse
-    #[lambdaval,deltaval]=singleImpulse(rawdata[1],10)
-    #if deltaval > -1:
-    #    deltaval=rawdata[0][deltaval]
+    [lambdaval,deltaval]=singleImpulse(rawdata[1],10)
+    if deltaval > -1:
+        deltaval=rawdata[0][deltaval]
     '''
     #Multi Impulse Begin
     [lambdaval, deltaval, peaks] = multiImpulse(rawdata[1], 10)
@@ -126,15 +126,15 @@ def optimize(rawdata):
     Gmin=int(max(data[0]))
     ninit=data[0][0]
     params=Parameters()
-    #params.add('alpha',value=0.3,min=0.0)
+    params.add('alpha',value=0.3,min=0.0)
     params.add('beta',value=0.05,min=0.0)
-    #params.add('gamma',value=0.05,min=0.0,max=1.0)
+    params.add('gamma',value=0.05,min=0.0,max=1.0)
     params.add('G',value=2*Gmin,min=Gmin,max=2000)
     params.add('n',value=ninit,vary=False)
     
     #Single Impulse
-    #params.add('lambdaval',value=lambdaval,min=0,max=lambdaval+1)
-    #params.add('delta',value=deltaval,vary=False)
+    params.add('lambdaval',value=lambdaval,min=0,max=lambdaval+1)
+    params.add('delta',value=deltaval,vary=False)
     '''
     #Multi Impulse Begin
     if peaks > 5:
