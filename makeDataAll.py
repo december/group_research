@@ -59,6 +59,7 @@ for line in reader:
 	line[2] = 0
 	data.append(line)
 csvfile.close()
+data = data[1:]
 for line in data:
 	if int(line[3]) >= 1448640000:
 		come.append(line)
