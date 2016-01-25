@@ -4,7 +4,7 @@ import disGroupData
 from lmfit import report_fit
 
 
-fw=open('../../sird_res/params.csv','w')
+fw=open('../../sir_res/params.csv','w')
 peaks = {}
 for i in range(135672):
     rawdata=loadGroupData.load_data(i)
@@ -14,7 +14,7 @@ for i in range(135672):
     report_fit(result.params)
     fw.write(str(result.params))
     fw.write('\n')
-    path='../../sird_res/'
+    path='../../sir_res/'
     #disGroupData.display_bi(rawdata,result,result_test,path+str(i)+'.png')
     p = disGroupData.display(rawdata,result,path+str(i)+'.png')
     if peaks.has_key(p):
