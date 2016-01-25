@@ -7,7 +7,7 @@ import matplotlib.pyplot
 def display(rawdata,result,path):
     x=np.array([rawdata[0],rawdata[2]])
     data=np.array([rawdata[1],rawdata[3]])
-    Tdis=40
+    Tdis=42
     xdis=range(Tdis)
     
     #Single Impulse

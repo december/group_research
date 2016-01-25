@@ -176,7 +176,7 @@ csvfile = file('../origindata/12078_20151120_20160117.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
-	if line[2][0] != 't' and int(line[2]) >= 1451577600:
+	if line[2][0] != 't' and int(line[2]) < 1451577600:
 		data.append(line)
 csvfile.close()
 splist = list()
