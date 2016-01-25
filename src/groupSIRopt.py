@@ -21,6 +21,6 @@ for i in range(135672):
         peaks[p] += 1
     else:
         peaks[p] = 1
-    print 'No.' + str(i) + ' items finished.(SIRd)'
+    print 'No.' + str(i) + ' items finished.(SIR)'
 fw.close()
 print peaks
