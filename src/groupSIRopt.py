@@ -4,9 +4,9 @@ import disGroupData
 from lmfit import report_fit
 
 
-fw=open('../../single_res/params.csv','a')
+fw=open('../../single_res/params.csv','w')
 peaks = {}
-for i in range(18829, 135672):
+for i in range(135672):
     rawdata=loadGroupData.load_data(i)
     testdata=loadGroupData.load_test_data(i)
     result=optGroupData.optimize(rawdata)
