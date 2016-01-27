@@ -113,7 +113,7 @@ def optimize(rawdata):
     x=np.array([rawdata[0],rawdata[2]])
     data=np.array([rawdata[1],rawdata[3]])
     seq=rawdata[1]
-    
+    '''
     #Single Impulse
     [lambdaval,deltaval]=singleImpulse(rawdata[1],10)
     if deltaval > -1:
@@ -125,7 +125,7 @@ def optimize(rawdata):
         if i > -1:
             i = rawdata[0][i]
     #Multi Impulse End
-    '''
+    
     Gmin=int(max(data[0]))
     ninit=data[0][0]
     params=Parameters()
@@ -134,7 +134,7 @@ def optimize(rawdata):
     params.add('gamma',value=0.05,min=0.0,max=1.0)
     params.add('G',value=2*Gmin,min=Gmin,max=2000)
     params.add('n',value=ninit,vary=False)
-    
+    '''
     #Single Impulse
     params.add('lambdaval',value=lambdaval,min=0,max=lambdaval+1)
     params.add('delta',value=deltaval,vary=False)
@@ -154,5 +154,5 @@ def optimize(rawdata):
     '''
     #Multi Impulse
     result=minimize(fcn2minMultiImpulse,params,args=(x,data,peaks))
-    '''
+    
     return result

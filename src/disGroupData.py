@@ -9,7 +9,7 @@ def display(rawdata,result,path):
     data=np.array([rawdata[1],rawdata[3]])
     Tdis=42
     xdis=range(Tdis)
-    
+    '''
     #Single Impulse
     res=optGroupData.params2fcnval(result.params,Tdis)
     peaks = 1
@@ -18,7 +18,7 @@ def display(rawdata,result,path):
     [lambdaval, deltaval, peaks] = optGroupData.multiImpulse(rawdata[1], 10)
     res=optGroupData.params2fcnvalMulti(result.params, Tdis, peaks)
     #Multi Impulse end
-    '''
+    
     final=res[0]
     nlist=res[2]
     fig=matplotlib.pyplot.figure()
