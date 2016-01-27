@@ -26,7 +26,7 @@ def multiImpulse(seq, threshold=10):
 def params2fcnval(params,nsteps):
     beta=params['beta'].value
     #alpha=params['alpha'].value
-    gamma=params['gamma'].value
+    #gamma=params['gamma'].value
     G=params['G'].value
     n=params['n'].value
     #lambdaval=params['lambdaval'].value
@@ -34,8 +34,8 @@ def params2fcnval(params,nsteps):
     #res=SIRd.SIRdecayImpulse(gamma,alpha,beta,G,n,nsteps,lambdaval,deltaval)
     #SI SIR and SIRd
     #res = SIRd.SIRd(gamma, alpha, beta, G, n, nsteps)
-    res = SIRd.SIRd(gamma, 0, beta, G, n, nsteps)
-    #res = SIRd.SI(beta, G, n, nsteps)
+    #res = SIRd.SIRd(gamma, 0, beta, G, n, nsteps)
+    res = SIRd.SI(beta, G, n, nsteps)
     return res
 
 def fcn2minSingleImpulse(params,x,data):
@@ -131,7 +131,7 @@ def optimize(rawdata):
     params=Parameters()
     #params.add('alpha',value=0.3,min=0.0)
     params.add('beta',value=0.05,min=0.0)
-    params.add('gamma',value=0.05,min=0.0,max=1.0)
+    #params.add('gamma',value=0.05,min=0.0,max=1.0)
     params.add('G',value=2*Gmin,min=Gmin,max=2000)
     params.add('n',value=ninit,vary=False)
     
