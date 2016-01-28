@@ -1,4 +1,4 @@
-def load_data(n):
+def load_data(n, day=50):
     gid_list_path='../../groupdata/idset.csv'
     dir_path='../../groupdata/'
     f=open(gid_list_path,'r')
@@ -8,11 +8,17 @@ def load_data(n):
     f.close()
     f=open(dir_path+gid+'.csv','r')
     data=list()
+    count = 0
     for i in range(4):
         line=f.readline()
         tmp=list()
         for j in line.strip().split(','):
-            tmp.append(int(j))
+            if count < day:
+                tmp.append(int(j))
+                count += 1
+            else:
+                count = 0
+                break
         data.append(tmp)
     f.close()
     return data

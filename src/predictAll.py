@@ -11,7 +11,7 @@ name = ['multi', 'single', 'SIRd', 'SIR', 'SI']
 
 fw=open('../../' + name[mode] + '_res/params.csv','w')
 for i in range(begin, end):
-    rawdata=loadGroupData.load_data(i)
+    rawdata=loadGroupData.load_data(i, traindays)
     result=optGroupData.optimize(rawdata, mode)
     report_fit(result.params)
     fw.write(str(result.params))

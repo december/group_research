@@ -4,21 +4,21 @@ import pylab
 import optGroupData
 import matplotlib.pyplot
 
-def display(rawdata,result,path):
+def display(rawdata,result,path,mode):
     x=np.array([rawdata[0],rawdata[2]])
     data=np.array([rawdata[1],rawdata[3]])
     Tdis=42
     xdis=range(Tdis)
     
     #Single Impulse
-    res=optGroupData.params2fcnval(result.params,Tdis)
-    peaks = 1
-    '''
+    if mode > 0:
+        res=optGroupData.params2fcnval(result.params,Tdis,mode)
+        peaks = 1
+    else:
     #Multi Impulse begin
-    [lambdaval, deltaval, peaks] = optGroupData.multiImpulse(rawdata[1], 10)
-    res=optGroupData.params2fcnvalMulti(result.params, Tdis, peaks)
+        [lambdaval, deltaval, peaks] = optGroupData.multiImpulse(rawdata[1], 10)
+        res=optGroupData.params2fcnvalMulti(result.params, Tdis, peaks)
     #Multi Impulse end
-    '''
     final=res[0]
     nlist=res[2]
     fig=matplotlib.pyplot.figure()
