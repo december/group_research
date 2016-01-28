@@ -196,6 +196,7 @@ splist.sort(lambda x,y:mycmp(x, y))
 print 'Order Finished...'
 
 #calculate and output
+splist.append([-1, 0, 2])
 idset = list()
 day = 86400
 lastid = -1

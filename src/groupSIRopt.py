@@ -6,7 +6,7 @@ from lmfit import report_fit
 
 fw=open('../../si_res/params.csv','a')
 peaks = {}
-for i in range(104187, 135672):
+for i in range(131836, 135671):
     rawdata=loadGroupData.load_data(i)
     testdata=loadGroupData.load_test_data(i)
     result=optGroupData.optimize(rawdata)
