@@ -3,9 +3,9 @@ import optGroupData
 import disGroupData
 from lmfit import report_fit
 
-traindays = 20
-begin = 0
-end = 135621
+traindays = 20  #how many days used to train
+begin = 0    #start with which group
+end = 135621    #end with which group
 mode = 0 #[0, 1, 2, 3, 4] for [multi, single, SIRd, SIR, SI]
 name = ['multi', 'single', 'SIRd', 'SIR', 'SI']
 
@@ -18,11 +18,6 @@ for i in range(begin, end):
     fw.write('\n')
     path='../../'+name[mode]+'/'
     #disGroupData.display_bi(rawdata,result,result_test,path+str(i)+'.png')
-    p = disGroupData.display(rawdata,result,path+str(i)+'.png',mode)
-    if peaks.has_key(p):
-        peaks[p] += 1
-    else:
-        peaks[p] = 1
     print 'No.' + str(i) + ' items finished.('+name[i]+')'
 fw.close()
 print peaks
