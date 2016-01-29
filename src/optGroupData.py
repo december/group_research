@@ -23,7 +23,7 @@ def multiImpulse(seq, threshold=10):
             deltaval.append(i)
     return [lambdaval, deltaval,len(lambdaval)]
 
-def params2fcnval(params,nstepsm,mode):
+def params2fcnval(params,nsteps,mode):
     beta=params['beta'].value
     G=params['G'].value
     n=params['n'].value
@@ -123,7 +123,7 @@ def optimize(rawdata, mode):
     if mode == 1:
         [lambdaval,deltaval]=singleImpulse(rawdata[1],10)
         if deltaval > -1:
-            deltaval=rawdata[0][deltaval
+            deltaval=rawdata[0][deltaval]
     #Multi Impulse Begin
     if mode == 0:
         [lambdaval, deltaval, peaks] = multiImpulse(rawdata[1], 10)

@@ -202,6 +202,12 @@ day = 86400
 lastid = -1
 unitdata = list()
 begintime = 0
+d = 0
+c = 0
+g = 0
+daylist = list()
+comelist = list()
+golist = list()
 for line in splist:
 	if line[0] != lastid:
 		if lastid != -1:
@@ -242,6 +248,23 @@ for line in splist:
 		g += 1
 	else:
 		c += 1
+daylist.append(d)
+comelist.append(c)
+golist.append(g)
+while d < 42:
+	d += 1
+	daylist.append(d)
+	comelist.append(c)
+	golist.append(g)
+unitdata.append(daylist)
+unitdata.append(comelist)
+unitdata.append(daylist)
+unitdata.append(golist)
+csvwrite = file('../groupdata/' + lastid + '.csv', 'wb')
+writer = csv.writer(csvwrite)
+writer.writerows(unitdata)
+csvwrite.close()
+
 csvwrite = file('../groupdata/idset.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(idset)
