@@ -14,6 +14,7 @@ for i in range(begin, end):
     rawdata=loadGroupData.load_data(i)
     result=optGroupData.optimize(rawdata, mode)
     report_fit(result.params)
+    fw.write(str(i)+',')
     fw.write(str(result.params))
     fw.write('\n')
     path='../../'+name[mode]+'/'

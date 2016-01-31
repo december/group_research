@@ -5,11 +5,21 @@ import SIRd
 import csv
 import numpy
 from scipy import stats
+import math
+
+c = 0
 
 def rmse(prediciton, target):
 	prediciton = numpy.array(prediciton)
 	target = numpy.array(target)
-	return numpy.sqrt(((prediciton - target) ** 2).mean())
+	r = numpy.sqrt(((prediciton - target) ** 2).mean())
+	if math.isnan(r):
+		print prediciton
+		print target
+		global c
+		c += 1
+		return 0
+	return r
 
 def getCurve(p, flag, steps):
 	p = [float(k) for k in p]
@@ -27,7 +37,8 @@ def calcAt(Pt, Nt, g):
 
 s1 = 0
 s2 = 0
-csvfile = file('../sir_res/simpleParams.csv', 'rb')
+s3 = 0
+csvfile = file('../../rawresult/simpleSIR.csv', 'rb')
 reader = csv.reader(csvfile)
 params = list()
 comermse = list()
@@ -36,8 +47,10 @@ gormse = list()
 for line in reader:
 	params.append(line)
 test = list()
-for i in range(2022):
+for i in range(135622):
 	#print i
+	if i % 1000 == 0:
+		print i
 	rawdata = loadGroupData.load_data(i)
 	at = list()
 	for j in range(len(rawdata[1])):
@@ -49,38 +62,48 @@ for i in range(2022):
 	#res = getCurve(params[i], 0)
 	t1, t2 = getCurve(params[i], 0, len(come))
 	temp = rmse(t1, come)
+	s1 += temp
 	result.append(temp)
 	come = [k/float(params[i][2]) for k in come]
 	temp = rmse(t2, come)
-	s1 += temp
 	result.append(temp)
 	comermse.append(temp)
 
 	t3, t4 = getCurve(params[i], 2, len(go))
 	temp = rmse(t3, go)
 	result.append(temp)
+	s2 += temp
 	go = [k/float(params[i][2]) for k in go]
 	temp = rmse(t4, go)
-	s2 += temp
 	result.append(temp)
 	gormse.append(temp)
 
 	t5, t6 = calcAt(t1, t3, float(params[i][2]))
 	temp = rmse(t5, at)
 	result.append(temp)
+	s3 += temp
 	at = [k/float(params[i][2]) for k in at]
 	temp = rmse(t6, at)
 	result.append(temp)
 	atrmse.append(temp)
 
 	test.append(result)
-csvwrite = file('../sir_res/rmse.csv', 'wb')
+csvwrite = file('../../rawdata/rmseSIR.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(test)
 csvwrite.close()
-print s1 / 2022
-print s2 / 2022
-print sum(comermse) / len(comermse)
-print sum(gormse) / len(gormse)
-print sum(atrmse) / len(atrmse)
+n = len(comermse) - c
+print s1 / n
+print s2 / n
+print s3 / n
+print sum(comermse) / n
+print sum(gormse) / n
+print sum(atrmse) / n
+print c
+print s1
+print s2
+print s3
+print sum(comermse)
+print sum(gormse)
+print sum(atrmse)
 print 'Finished.'

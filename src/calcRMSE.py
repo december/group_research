@@ -25,17 +25,21 @@ def calcAt(Pt, Nt, g):
 	newAt = [k/g for k in At]
 	return At, newAt
 
-csvfile = file('../lyf_res/simpleParams.csv', 'rb')
+csvfile = file('../../rawresult/simpleSingle.csv', 'rb')
 reader = csv.reader(csvfile)
 params = list()
 comermse = list()
 gormse = list()
 atrmse = list()
+s1 = 0
+s2 = 0
+s3 = 0
 for line in reader:
 	params.append(line)
 test = list()
-for i in range(2022):
-	#print i
+for i in range(135622):
+	if i % 1000 == 0:
+		print i
 	rawdata = loadGroupData.load_data(i)
 	at = list()
 	for j in range(len(rawdata[1])):
@@ -47,6 +51,7 @@ for i in range(2022):
 	t1, t2 = getCurve(params[i], 0, len(come))
 	temp = rmse(t1, come)
 	result.append(temp)
+	s1 += temp
 	come = [k/float(params[i][3]) for k in come]
 	temp = rmse(t2, come)
 	result.append(temp)
@@ -55,6 +60,7 @@ for i in range(2022):
 	t3, t4 = getCurve(params[i], 2, len(go))
 	temp = rmse(t3, go)
 	result.append(temp)
+	s2 += temp
 	go = [k/float(params[i][3]) for k in go]
 	temp = rmse(t4, go)
 	result.append(temp)
@@ -63,15 +69,19 @@ for i in range(2022):
 	t5, t6 = calcAt(t1, t3, float(params[i][3]))
 	temp = rmse(t5, at)
 	result.append(temp)
+	s3 += temp
 	at = [k/float(params[i][3]) for k in at]
 	temp = rmse(t6, at)
 	result.append(temp)
 	atrmse.append(temp)
 
 	test.append(result)
-csvwrite = file('../lyf_res/rmse.csv', 'wb')
+csvwrite = file('../../rawdata/rmseSingle.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(test)
+print s1 / 135622
+print s2 / 135622
+print s3 / 135622
 print sum(comermse) / len(comermse)
 print sum(gormse) / len(gormse)
 print sum(atrmse) / len(atrmse)

@@ -1,6 +1,6 @@
 import csv
 
-csvfile = file('params.csv', 'rb')
+csvfile = file('multiParams.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
@@ -39,7 +39,7 @@ for line in data:
 		unit.append(p)
 	params.append(unit)
 	unit = list()
-csvwrite = file('simpleParams.csv', 'wb')
+csvwrite = file('simpleMulti.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(params)
 csvwrite.close()

@@ -1,6 +1,6 @@
 import csv
 
-csvfile = file('params.csv', 'rb')
+csvfile = file('siParams.csv', 'rb')
 reader = csv.reader(csvfile)
 data = list()
 for line in reader:
@@ -10,11 +10,11 @@ unit = list()
 temp = list()
 maxparam = list()
 minparam = list()
-for i in range(7):
+for i in range(3):
 	maxparam.append(-1)
 	minparam.append(100)
 for line in data:
-	for i in range(7):
+	for i in range(3):
 		temp = line[i*4+2].split(' ')
 		p = float(temp[1][6:])
 		if p > maxparam[i]:
@@ -24,7 +24,7 @@ for line in data:
 		unit.append(p)
 	params.append(unit)
 	unit = list()
-csvwrite = file('simpleParams.csv', 'wb')
+csvwrite = file('simpleSI.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(params)
 csvwrite.close()
