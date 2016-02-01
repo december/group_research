@@ -12,8 +12,9 @@ def SI(beta=0.05, G=200, n=40, nsteps=100):
     Pt[0]=n
     myRes=list()
     At[0]=Pt[0]-Nt[0]
+    aseq[0]=At[0]
     for t in range(1,totSteps):
-        S=G-Pt[t-1]
+        S=max(0, G-Pt[t-1])
         pseq[t]=S*beta*At[t-1]/G
         Pt[t]=Pt[t-1]+pseq[t]
         aseq[t]=pseq[t]
@@ -46,7 +47,7 @@ def SIRd(gamma=0.05, alpha=1.0, beta=0.05, G=200, n=40, nsteps=100):
     At[0]=Pt[0]-Nt[0]
     aseq[0]=At[0]
     for t in range(1,totSteps):
-        S=G-Pt[t-1]
+        S=max(0, G-Pt[t-1])
         pseq[t]=S*beta*At[t-1]/G
         Pt[t]=Pt[t-1]+pseq[t]
         aseq[t]=pseq[t]
@@ -89,7 +90,7 @@ def SIRdecayImpulse(gamma=0.05, alpha=1.0, beta=0.05, G=200, n=40, nsteps=100, l
     At[0]=Pt[0]-Nt[0]
     aseq[0]=At[0]
     for t in range(1,totSteps):
-        S=G-Pt[t-1]
+        S=max(0, G-Pt[t-1])
         pseq[t]=S*beta*At[t-1]/G+lambdaval*(t==deltaval)
         Pt[t]=Pt[t-1]+pseq[t]
         aseq[t]=pseq[t]
@@ -126,7 +127,7 @@ def SIRdecayMultiImpulse(gamma=0.05, alpha=1.0, beta=0.05, G=200, n=40, nsteps=1
     At[0]=Pt[0]-Nt[0]
     aseq[0]=At[0]
     for t in range(1,totSteps):
-        S=G-Pt[t-1]
+        S=max(0, G-Pt[t-1])
         pseq[t]=S*beta*At[t-1]/G
         for order in range(len(deltaval)):
             if t == deltaval[order]:

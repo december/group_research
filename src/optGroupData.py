@@ -147,7 +147,7 @@ def optimize(rawdata, mode):
     params.add('beta',value=0.05,min=0.0)
     if mode < 4:
         params.add('gamma',value=0.05,min=0.0,max=1.0)
-    params.add('G',value=2*Gmin,min=Gmin,max=2000)
+    params.add('G',value=2*Gmin,min=Gmin,max=100000)
     params.add('n',value=ninit,vary=False)
     
     #Single Impulse
