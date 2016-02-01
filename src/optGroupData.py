@@ -53,14 +53,22 @@ def fcn2minSingleImpulse(params,x,data,mode):
     res=params2fcnval(params,nsteps,mode)
     plist=list()
     nlist=list()
-    for i in x1:
-        plist.append(res[0][int(i)])
-    for i in x2:
-        nlist.append(res[2][int(i)])
-    model=np.array(plist+nlist)
-    d1=list(data[0])
-    d2=list(data[1])
-    data_f=np.array(d1+d2)
+    if mode < 4:
+        for i in x1:
+            plist.append(res[0][int(i)])
+        for i in x2:
+            nlist.append(res[2][int(i)])
+        model=np.array(plist+nlist)
+        d1=list(data[0])
+        d2=list(data[1])
+        data_f=np.array(d1+d2)
+    else:
+        for i in x1:
+            plist.append(res[0][int(i)])
+        model = np.array(plist)
+        d1 = np.array(data[0])
+        d2 = np.array(data[1])
+        data_f = d1 - d2
     try:
         return model-data_f
     except:

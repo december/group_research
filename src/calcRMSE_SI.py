@@ -19,19 +19,21 @@ def getCurve(p, flag, steps):
 
 s = 0
 t = 0
-csvfile = file('../../rawresult/simpleSI.csv', 'rb')
+csvfile = file('../../model_params_20dyas_and_30days/simpleSI_30.csv', 'rb')
 reader = csv.reader(csvfile)
 params = list()
 for line in reader:
 	params.append(line)
 test = list()
-for i in range(135622):
+length = 30
+total = 135621
+for i in range(total):
 	#print i
 	if i % 1000 == 0:
 		print i
 	rawdata = loadGroupData.load_data(i)
-	come = numpy.array(rawdata[1])
-	go = numpy.array(rawdata[3])
+	come = numpy.array(rawdata[1][:length])
+	go = numpy.array(rawdata[3][:length])
 	for j in range(len(come)):
 		come[j] -= go[j]
 	result = list()
@@ -53,10 +55,10 @@ for i in range(135622):
 	result.append(temp)
 	'''
 	test.append(result)
-csvwrite = file('../../rawdata/rmseSI.csv', 'wb')
+csvwrite = file('../../rawdata/rmseSI30.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(test)
 csvwrite.close()
-print s / 135622
-print t / 135622
+print s / total
+print t / total
 print 'Finished.'

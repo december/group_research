@@ -32,7 +32,7 @@ def calcAt(Pt, Nt, g):
 	newAt = [k/g for k in At]
 	return At, newAt
 
-csvfile = file('../../rawresult/simpleMulti.csv', 'rb')
+csvfile = file('../../model_params_20dyas_and_30days/simpleMulti_30.csv', 'rb')
 reader = csv.reader(csvfile)
 params = list()
 comermse = list()
@@ -41,18 +41,20 @@ gormse = list()
 s1 = 0
 s2 = 0
 s3 = 0
+length = 30
+total = 135621
 for line in reader:
 	params.append(line)
 test = list()
-for i in range(135622):
+for i in range(total):
 	if i % 1000 == 0:
 		print i
 	rawdata = loadGroupData.load_data(i)
 	at = list()
-	for j in range(len(rawdata[1])):
+	for j in range(length):
 		at.append(float(rawdata[1][j]) - float(rawdata[3][j]))
-	come = numpy.array(rawdata[1])
-	go = numpy.array(rawdata[3])
+	come = numpy.array(rawdata[1][:length])
+	go = numpy.array(rawdata[3][:length])
 	result = list()
 	#res = getCurve(params[i], 0)
 	t1, t2 = getCurve(params[i], 0, len(come))
@@ -83,13 +85,13 @@ for i in range(135622):
 	atrmse.append(temp)
 
 	test.append(result)
-csvwrite = file('../../rawdata/rmseMulti.csv', 'wb')
+csvwrite = file('../../rawdata/rmseMulti30.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(test)
 csvwrite.close()
-print s1 / 135622
-print s2 / 135622
-print s3 / 135622
+print s1 / total
+print s2 / total
+print s3 / total
 print sum(comermse) / len(comermse)
 print sum(gormse) / len(gormse)
 print sum(atrmse) / len(atrmse)
