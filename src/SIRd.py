@@ -44,6 +44,7 @@ def SIRd(gamma=0.05, alpha=1.0, beta=0.05, G=200, n=40, nsteps=100):
     #print qt
     Nt[0]=n*qt[0]
     At[0]=Pt[0]-Nt[0]
+    aseq[0]=At[0]
     for t in range(1,totSteps):
         S=G-Pt[t-1]
         pseq[t]=S*beta*At[t-1]/G
@@ -86,6 +87,7 @@ def SIRdecayImpulse(gamma=0.05, alpha=1.0, beta=0.05, G=200, n=40, nsteps=100, l
     #print qt
     Nt[0]=n*qt[0]
     At[0]=Pt[0]-Nt[0]
+    aseq[0]=At[0]
     for t in range(1,totSteps):
         S=G-Pt[t-1]
         pseq[t]=S*beta*At[t-1]/G+lambdaval*(t==deltaval)
@@ -122,6 +124,7 @@ def SIRdecayMultiImpulse(gamma=0.05, alpha=1.0, beta=0.05, G=200, n=40, nsteps=1
     #print qt
     Nt[0]=n*qt[0]
     At[0]=Pt[0]-Nt[0]
+    aseq[0]=At[0]
     for t in range(1,totSteps):
         S=G-Pt[t-1]
         pseq[t]=S*beta*At[t-1]/G

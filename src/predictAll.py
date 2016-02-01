@@ -3,9 +3,9 @@ import optGroupData
 import disGroupData
 from lmfit import report_fit
 
-traindays = 20  #how many days used to train
+traindays = 20  #how many days used to train(42 for all)
 begin = 0    #start with which group
-end = 135621    #end with which group
+end = 135622    #end with which group
 mode = 0 #[0, 1, 2, 3, 4] for [multi, single, SIRd, SIR, SI]
 name = ['multi', 'single', 'SIRd', 'SIR', 'SI']
 
