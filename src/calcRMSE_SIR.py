@@ -8,6 +8,9 @@ from scipy import stats
 import math
 
 c = 0
+flatlist = list()
+length = 42
+haveFlat = False
 
 def rmse(prediciton, target):
 	prediciton = numpy.array(prediciton)
@@ -35,20 +38,48 @@ def calcAt(Pt, Nt, g):
 	newAt = [k/g for k in At]
 	return At, newAt
 
+def isFlat(fl, order):
+	if len(fl) == 1:
+		if fl[0] == order:
+			return True
+		else:
+			return False
+	index = len(fl) / 2
+	if fl[index] == order:
+		return True
+	if fl[index] > order:
+		return isFlat(fl[:index], order)
+	if fl[index] < order:
+		if index + 1 >= len(fl):
+			return False
+		return isFlat(fl[index+1:], order)
+
+#kick out flat groups
+if not haveFlat:
+	csvfile = file('../../flatID.csv', 'rb')
+	reader = csv.reader(csvfile)
+	for line in reader:
+		flatlist.append(int(line[0].strip()))
+	print len(flatlist)
+
+reader = csv.reader(csvfile)
+for line in reader:
+	flatlist.append(int(line[0].strip()))
+print len(flatlist)
 s1 = 0
 s2 = 0
 s3 = 0
-csvfile = file('../../model_params_20dyas_and_30days/simpleSIR_30.csv', 'rb')
+csvfile = file('../../rawresult/simpleSIR.csv', 'rb')
 reader = csv.reader(csvfile)
 params = list()
 comermse = list()
 atrmse = list()
 gormse = list()
-length = 30
-total = 135621
 for line in reader:
 	params.append(line)
 test = list()
+
+total = 135621
 for i in range(total):
 	#print i
 	if i % 1000 == 0:
@@ -90,7 +121,7 @@ for i in range(total):
 	atrmse.append(temp)
 
 	test.append(result)
-csvwrite = file('../../rawdata/rmseSIR30.csv', 'wb')
+csvwrite = file('../../rawdata/rmseSIR'+str(length)+'.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(test)
 csvwrite.close()

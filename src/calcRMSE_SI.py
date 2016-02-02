@@ -6,6 +6,10 @@ import csv
 import numpy
 from scipy import stats
 
+flatlist = list()
+length = 42
+haveFlat = False
+
 def rmse(prediciton, target):
 	prediciton = numpy.array(prediciton)
 	target = numpy.array(target)
@@ -17,6 +21,30 @@ def getCurve(p, flag, steps):
 	s = [k/p[1] for k in t[flag]]
 	return t[flag], s
 
+def isFlat(fl, order):
+	if len(fl) == 1:
+		if fl[0] == order:
+			return True
+		else:
+			return False
+	index = len(fl) / 2
+	if fl[index] == order:
+		return True
+	if fl[index] > order:
+		return isFlat(fl[:index], order)
+	if fl[index] < order:
+		if index + 1 >= len(fl):
+			return False
+		return isFlat(fl[index+1:], order)
+
+#kick out flat groups
+if not haveFlat:
+	csvfile = file('../../flatID.csv', 'rb')
+	reader = csv.reader(csvfile)
+	for line in reader:
+		flatlist.append(int(line[0].strip()))
+	print len(flatlist)
+
 s = 0
 t = 0
 csvfile = file('../../model_params_20dyas_and_30days/simpleSI_30.csv', 'rb')
@@ -25,7 +53,7 @@ params = list()
 for line in reader:
 	params.append(line)
 test = list()
-length = 30
+
 total = 135621
 for i in range(total):
 	#print i
@@ -55,7 +83,7 @@ for i in range(total):
 	result.append(temp)
 	'''
 	test.append(result)
-csvwrite = file('../../rawdata/rmseSI30.csv', 'wb')
+csvwrite = file('../../rawdata/rmseSI'+str(length)+'.csv', 'wb')
 writer = csv.writer(csvwrite)
 writer.writerows(test)
 csvwrite.close()
