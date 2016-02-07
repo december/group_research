@@ -27,6 +27,10 @@ def params2fcnval(params,nsteps,mode):
     beta=params['beta'].value
     G=params['G'].value
     n=params['n'].value
+    if mode == 5:
+        eps = params['eps'].value
+        res = SIRd.SpikeM(beta, G, n nsteps, eps)
+        return res
     if mode == 4:
         res = SIRd.SI(beta, G, n, nsteps)
         return res
@@ -150,6 +154,10 @@ def optimize(rawdata, mode):
     params.add('G',value=2*Gmin,min=Gmin,max=100000)
     params.add('n',value=ninit,vary=False)
     
+    #SpikeM
+    if mode == 5:
+        params.add('eps', value=0.0, min=0.0)
+
     #Single Impulse
     if mode == 1:
         params.add('lambdaval',value=lambdaval,min=0,max=lambdaval+1)

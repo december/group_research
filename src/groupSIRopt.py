@@ -6,7 +6,7 @@ from lmfit import report_fit
 traindays = 20
 begin = 0
 end = 135621
-mode = 0 #[0, 1, 2, 3, 4] for [multi, single, SIRd, SIR, SI]
+mode = 0 #[0, 1, 2, 3, 4, 5] for [multi, single, SIRd, SIR, SI, SpikeM]
 name = ['multi', 'single', 'SIRd', 'SIR', 'SI']
 
 fw=open('../../' + name[mode] + '_res/params.csv','w')

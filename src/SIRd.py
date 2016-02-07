@@ -1,3 +1,23 @@
+def SpikeM(beta=0.05, G=200, n=40, nsteps=100, eps=0):
+    totSteps = nsteps
+    pseq = [0 for i in range(totSteps)]
+    Pt =  [0 for i in range(totSteps)]
+    Ut =  [0 for i in range(totSteps)]
+    n = int(n)
+    pseq[0] = n
+    Pt[0] = n
+    Ut[0] = G
+    for t in range(1, totSteps):
+        s = 0
+        for i in range(t):
+            s += pseq[i] * beta * ((t-i) ** (-1.5))
+        pseq[t] = Ut[t-1] * s + eps
+        Ut[t] = Ut[t-1] - pseq[t]
+        Pt[t] = Pt[t-1] + pseq[t]
+    myRes = list()
+    myRes.append(Pt)
+    return myRes
+
 def SI(beta=0.05, G=200, n=40, nsteps=100):
     totSteps = nsteps
     pseq = [0 for i in range(totSteps)]
